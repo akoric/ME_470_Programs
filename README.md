@@ -36,6 +36,22 @@ The diagram above shows the configuration for Lab 10 with the max possible slope
 
 Using the data in `Max_Q_with_loss.py` and material properties of the flume, an estimate of the max flow rate using Bernoulli's extended equation notes the following results:
 
+### Equations Solved
+
+The script solves the following system of three equations for velocity ($v_2$), friction factor ($f$), and Reynolds number ($Re_D$):
+
+**Hydraulic Diameter ($D_h$):**
+   $$ D_h = \frac{4A}{P} = \frac{2HW}{H+W} $$
+
+1. **Extended Bernoulli Equation (Energy Equation):**
+   $$ (z_1 - z_2) - \frac{v_2^2}{2g} - f \frac{L}{D_h} \frac{v_2^2}{2g} = 0 $$
+
+2. **Reynolds Number Definition:**
+   $$ Re_D - \frac{\rho v_2 D_h}{\mu} = 0 $$
+
+3. **Haaland Equation (Friction Factor):**
+   $$ \frac{1}{\sqrt{f}} + 1.8 \log_{10} \left( \left( \frac{\epsilon/D_h}{3.7} \right)^{1.11} + \frac{6.9}{Re_D} \right) = 0 $$
+
 ### ==== Results ====
 ```text
 v2 (m/s)   = 1.37621273608829
