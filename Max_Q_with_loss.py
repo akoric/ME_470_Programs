@@ -1,14 +1,14 @@
 import sympy as sp
 
 # Given
-H = 0.2032     # m (8")
-W = 0.1524     # m (6")
-L = 3.6576     # m (12')
-e = 1.5e-6     # m (absolute roughness for clear acrylic)
+H = 0.2032 # m (8")
+W = 0.1524 # m (6")
+L = 3.6576 # m (12')
+e = 1.5e-6 # m (absolute roughness for clear acrylic)
 g = 9.81
 
-rho = 998      # kg/m^3
-mu  = 0.001    # Pa·s
+rho = 998 # kg/m^3
+mu  = 0.001 # Pa·s
 
 # Hydraulic diameter for rectangular duct:
 # Dh = 4A/P = 4(HW) / (2(H+W)) = 2HW/(H+W)

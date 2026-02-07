@@ -10,7 +10,7 @@ plt.figure(figsize=(10, 4))
 ax = sns.boxplot(x=data)
 
 # Customize x-axis ticks
-ax.xaxis.set_major_locator(ticker.MaxNLocator(15))  # Increase number of ticks
+ax.xaxis.set_major_locator(ticker.MaxNLocator(15))
 plt.grid(True, axis='x', linestyle='--', alpha=0.7)
 
 # Labels

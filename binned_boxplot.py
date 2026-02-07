@@ -22,7 +22,7 @@ plt.figure(figsize=(10, 6))
 ax = sns.boxplot(x='h_bin', y=col_q, data=df)
 
 # Customize y-axis ticks
-ax.yaxis.set_major_locator(ticker.MaxNLocator(15))  # Increase tick density
+ax.yaxis.set_major_locator(ticker.MaxNLocator(15))
 plt.grid(True, axis='y', linestyle='--', alpha=0.7)
 
 # Customize labels and title
