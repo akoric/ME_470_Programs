@@ -1,0 +1,69 @@
+#Pump selection 
+import numpy as np
+
+#Water properties
+rho = 998 # density [kg/m^3]
+mu  = 0.001 # viscosity [Pa·s]
+g = 9.81 #m/s^2
+
+#Pipe Diamater (SCH 40,)
+#1" (1.315 OD, 1.049 ID)
+#2" (2.375 OD, 2.067 ID)
+#3" (3.5 OD, 3.068 ID)
+#4" (4.5 OD, 4.026 ID)
+
+D_in = 2.067 #[ID in] 4.5 OD max of pipe/flange, (lab constraints)
+D_m = D_in * 25.4 / 1000 #[m]
+D = D_m
+
+#Pipe Velocity
+
+A = (np.pi/4) *(D**2) #m^2
+
+massflowrate = 6 #[kg/s], 6 
+Q = massflowrate/rho #flume exit volumertic flowrate [m^3/s] IS DEF WRONG
+
+v = Q/A #[m/s]
+
+#PVC Frictional Factor (Haaland Equation)
+Re = (rho * v * D) / mu #turbulent
+e = 1.5e-6          # Roughness of PVC [m] 
+f = ( -1.8 * np.log10( ((e/D)/3.7)**1.11 + 6.9/Re ) )**-2
+
+#Head Loss
+L = 10.0 #total length of pipe, IDK IF THIS IS REAL ASK SUNDAY
+n = 4 #number of elbow pipes
+K_elbow = 0.9 * n
+K_entrance = 0.5 # head loss from entrance into tank
+K_exit = 1 #head loss from exit into flume
+
+h_major = f * (L/D) * ((v**2)/(2*g))
+h_minor = (K_elbow + K_entrance + K_exit) * ((v**2)/(2*g))
+
+#Pump Head
+
+H_pump = h_major + h_minor  # total head loss
+
+#Power Requirment
+efficency = 0.6
+
+P_h = g * rho * Q * H_pump #[Watts]hydraulic power
+P_pump_w = P_h / efficency #[Watts]centifugal pump power
+P_pump_hp = P_pump_w / 745.7 #[hp]centifugal pump power
+
+#NPSHA (net postaive suction head) -> pressure avalible to pump to prevent caviataion
+P_atm = 10.33 # [m] atmospheric pressue , equivelnt to 14.7 psi
+P_static = 1.0# static head, distance from water surface in tank to centerline of pump inlet (weight tank above water so +)
+P_vapor = 0.24 #[m] vapor presure,  tempreture of water (room TEMPRETURE, check assumption?)
+
+l = 2 # [m] suction pipe length, (REDO assumption)
+h_f = f * (l/D) * ((v**2)/(2*g)) #suction friction lead loss
+NPSHAa = P_atm + P_static  - P_vapor - h_f # must be significanly larger than graph value
+
+
+print(f"Target Volumetric Flowrate: {Q:.4f} m^3/s")
+print(f"Pipe Diameter: {D_in:.4f} in ID")
+print(f"Pipe Velocity: {v:.2f} m/s")
+print(f"Total Head Requirement: {H_pump:.2f} meters of water")
+print(f"Power Requirement: {P_pump_hp:.2f} hp")
+print(f"NPSHA allowable: {NPSHAa:.2f} ")
