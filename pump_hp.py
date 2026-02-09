@@ -2,9 +2,7 @@ import math
 from dataclasses import dataclass, field
 from typing import List, Optional
 
-# ----------------------------
 # Unit helpers
-# ----------------------------
 FT_TO_M = 0.3048
 IN_TO_M = 0.0254
 HP_PER_WATT = 1.0 / 745.699872  # mechanical hp
@@ -12,9 +10,7 @@ HP_PER_WATT = 1.0 / 745.699872  # mechanical hp
 def inch_diameter_to_m(d_in: float) -> float:
     return d_in * IN_TO_M
 
-# ----------------------------
 # Friction factor (Haaland)
-# ----------------------------
 def friction_factor_haaland(Re: float, rel_roughness: float) -> float:
     """
     Darcy friction factor.
@@ -30,9 +26,7 @@ def friction_factor_haaland(Re: float, rel_roughness: float) -> float:
     term = (rel_roughness / 3.7)**1.11 + 6.9 / Re
     return 1.0 / ( (-1.8 * math.log10(term))**2 )
 
-# ----------------------------
 # Loss elements
-# ----------------------------
 @dataclass
 class MinorLoss:
     name: str
@@ -98,7 +92,7 @@ def compute_pump_head_and_hp(params: SystemParams):
     # Elevation head
     delta_z = params.z2_m - params.z1_m
 
-    # Kinetic term depending on modeling choice
+    # Kinetic term (depending on modeling choice)
     if params.point2_is_reservoir_free_surface:
         V2_term = 0.0  # free surface
         # add exit loss K=1 (jet dissipates)
@@ -138,13 +132,11 @@ def compute_pump_head_and_hp(params: SystemParams):
     }
 
 if __name__ == "__main__":
-    # ----------------------------
-    # Your stated loss assumptions
-    # ----------------------------
+    # Stated loss assumptions
     # Minor losses:
     # - Tee branch exiting weight tank: K = 1
-    # - Contraction 3" -> 2": K = 0.37 (typically referenced to downstream velocity)
-    # - 6x 90-deg turns in 2" pipe: K = 1.1 each (make the count variable)
+    # - Contraction 3" -> 2": K = 0.37 (from online references)
+    # - 6x 90-deg turns in 2" pipe: K = 1.1 each (from online references)
     n_elbows = 6
 
     params = SystemParams(
@@ -153,9 +145,9 @@ if __name__ == "__main__":
         z2_m=3.0 * FT_TO_M,
         D_main_m=inch_diameter_to_m(2.0),
         L_main_m=15.0 * FT_TO_M,
-        eps_m=1.5e-6,          # PVC-ish
+        eps_m=1.5e-6,          # PVC
         pump_efficiency=0.70,
-        point2_is_reservoir_free_surface=False,  # your "point 2 at outlet, has velocity" assumption
+        point2_is_reservoir_free_surface=False,  # "point 2 at outlet, has velocity" assumption
         minor_losses=[
             MinorLoss(name="Tee branch (exit weight tank)", K=1.0),
             MinorLoss(name="Contraction 3in->2in", K=0.37),
