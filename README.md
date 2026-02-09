@@ -96,21 +96,28 @@ The pump provides energy to overcome:
 
 **Pressure assumptions**
 - Both point 1 and point 2 are exposed to atmosphere:
-  $$ P_1 = P_2 = P_{atm} $$
-  So the pressure terms cancel.
+
+$$ P_1 = P_2 = P_{atm} $$
+
+So the pressure terms cancel.
 
 **Velocity assumptions**
 - At point 1, the tank surface area is very large, so:
-  $$ V_1 \approx 0 $$
+
+$$ V_1 \approx 0 $$
+
 - At point 2, flow exits a pipe, so:
-  $$ V_2 = \frac{Q}{A_{pipe}} $$
+
+$$ V_2 = \frac{Q}{A_{pipe}} $$
 
 ### 3. Elevation Reference
 
 We choose point 1 as the elevation reference:
+
 $$ z_1 = 0 $$
 
 Point 2 is higher than point 1 by:
+
 $$ z_2 = 3 \text{ ft} = 0.9144 \text{ m} $$
 
 ### 4. Bernoulli / Energy Equation Used
@@ -126,11 +133,13 @@ $$ h_s = (z_2 - z_1) + \frac{V_2^2}{2g} + h_L $$
 ### 5. Head Losses Included
 
 Total losses:
+
 $$ h_L = h_{major} + h_{minor} $$
 
 #### 5.1 Minor losses (fittings)
 
 Minor losses are modeled using:
+
 $$ h_{minor} = \sum K_i \frac{V^2}{2g} $$
 
 The current model includes:
@@ -159,6 +168,7 @@ The friction factor is computed using the Haaland equation:
 $$ \frac{1}{\sqrt{f}} = -1.8 \log_{10} \left[ \left( \frac{\epsilon/D}{3.7} \right)^{1.11} + \frac{6.9}{Re} \right] $$
 
 Pipe material is assumed to be PVC (very smooth), with roughness:
+
 $$ \epsilon \approx 1.5 \times 10^{-6} \text{ m} $$
 
 ### 6. Pump Head Output
@@ -170,17 +180,21 @@ $$ h_s = \Delta z + \frac{V_2^2}{2g} + h_{major} + h_{minor} $$
 ### 7. Pump Power Calculation
 
 Hydraulic power added to the fluid:
+
 $$ P_{hyd} = \rho g Q h_s $$
 
 Pump shaft power (accounting for efficiency):
+
 $$ P_{shaft} = \frac{P_{hyd}}{\eta} $$
 
 Horsepower conversion:
+
 $$ HP = \frac{P_{shaft}}{745.7} $$
 
 ### 8. Important Modeling Note (Exit Loss vs Outlet Velocity)
 
 This model treats point 2 at the pipe outlet, so it explicitly includes:
+
 $$ \frac{V_2^2}{2g} $$
 
 Because of this, the model does **NOT** include a separate exit loss term of $K=1$.
