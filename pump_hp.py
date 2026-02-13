@@ -141,17 +141,19 @@ if __name__ == "__main__":
 
     params = SystemParams(
         Q_m3_s=0.006,
-        z1_m=0.0,
-        z2_m=3.0 * FT_TO_M,
-        D_main_m=inch_diameter_to_m(2.0),
-        L_main_m=15.0 * FT_TO_M,
-        eps_m=1.5e-6,          # PVC
-        pump_efficiency=0.70,
+        z1_m = 0.0,
+        z2_m = 5.24 * FT_TO_M,
+        D_main_m = inch_diameter_to_m(2.0),
+        L_main_m = 32.0 * FT_TO_M,
+        eps_m = 1.5e-6,          # PVC
+        pump_efficiency = 0.70,
         point2_is_reservoir_free_surface=False,  # "point 2 at outlet, has velocity" assumption
         minor_losses=[
             MinorLoss(name="Tee branch (exit weight tank)", K=1.0),
             MinorLoss(name="Contraction 3in->2in", K=0.37),
+            MinorLoss(name="Contraction 2in->1in", K=0.4),
             MinorLoss(name=f"{n_elbows}x 90-deg elbows", K=1.1 * n_elbows),
+            MinorLoss(name="Sudden expansion 1in->2in", K=0.2, diameter_m=inch_diameter_to_m(1.0)),
         ],
     )
 
