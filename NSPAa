@@ -1,0 +1,92 @@
+#NSPAa (w/o 2 inch piping)
+
+import math
+
+# Constants
+G = 9.81
+RHO = 1000  # kg/m^3
+MU = 0.001   # Pa*s
+EPS = 1.5e-6 # PVC roughness in meters
+Q = 0.006    # Design flow rate in m^3/s
+
+def calculate_segment_loss(L_mm, D_in, K_total):
+    D_m = D_in * 0.0254
+    V = Q / (math.pi * (D_m**2) / 4)
+    Re = (RHO * V * D_m) / MU
+    
+    # Haaland Equation for friction factor
+    f = 1.0 / ((-1.8 * math.log10(((EPS/D_m)/3.7)**1.11 + 6.9/Re))**2)
+    
+    h_major = f * ((L_mm/1000.0)/D_m) * (V**2 / (2*G))
+    h_minor = K_total * (V**2 / (2*G))
+    return h_major + h_minor
+
+# 1. 3-inch Section: 25mm pipe + Tank Exit (K=1.0)
+h_3in = calculate_segment_loss(250, 3, 1.0)
+
+# 2. 3-inch Section: (50.8+63.5+4170)mm pipe + 3x Elbows (K=3.3) + Diverter Valve (K=1.1), acts as an elbow
+h_2in = calculate_segment_loss(508 + 635 + 4170, 3, 3.3 + 1.1)
+
+# 3. 1-inch Section: 62mm pipe + Eccentric Reducer 3-to-1 (K=0.27)
+h_1in = calculate_segment_loss(620, 1, 0.27)
+
+total_hf = h_3in + h_2in + h_1in
+
+
+#NPSHA (net postaive suction head) -> pressure avalible to pump to prevent caviataion
+P_atm = 10.33 # [m] atmospheric pressue , equivelnt to 14.7 psi
+P_static = 0.6096 # +, the tank is 3/4 filled up 
+P_vapor = 0.24 #[m] vapor presure,  tempreture of water (room TEMPRETURE, check assumption?)
+NPSHAa = P_atm + P_static  - P_vapor - total_hf # must be significanly larger than graph value
+
+
+print(f"Total Friction Head Loss (hf): {total_hf:.3f} meters")
+
+print(f"NPSHA allowable: {NPSHAa:.2f} ")
+
+
+#NSPAa (w/2 inch piping)
+
+import math
+
+# Constants
+G = 9.81
+RHO = 1000  # kg/m^3
+MU = 0.001   # Pa*s
+EPS = 1.5e-6 # PVC roughness in meters
+Q = 0.006    # Design flow rate in m^3/s
+
+def calculate_segment_loss(L_mm, D_in, K_total):
+    D_m = D_in * 0.0254
+    V = Q / (math.pi * (D_m**2) / 4)
+    Re = (RHO * V * D_m) / MU
+    
+    # Haaland Equation for friction factor
+    f = 1.0 / ((-1.8 * math.log10(((EPS/D_m)/3.7)**1.11 + 6.9/Re))**2)
+    
+    h_major = f * ((L_mm/1000.0)/D_m) * (V**2 / (2*G))
+    h_minor = K_total * (V**2 / (2*G))
+    return h_major + h_minor
+
+# 1. 3-inch Section: 25mm pipe + Tank Exit (K=1.0)
+h_3in = calculate_segment_loss(250, 3, 1.0)
+
+# 2. 3-inch Section: (50.8+63.5+4170)mm pipe + 3x Elbows (K=3.3) + Diverter Valve (K=0.37)
+h_2in = calculate_segment_loss(508 + 635 + 4170, 2, 3.3 + 0.37)
+
+# 3. 1-inch Section: 62mm pipe + Eccentric Reducer 3-to-1 (K=0.40)
+h_1in = calculate_segment_loss(620, 1, 0.40)
+
+total_hf = h_3in + h_2in + h_1in
+
+
+#NPSHA (net postaive suction head) -> pressure avalible to pump to prevent caviataion
+P_atm = 10.33 # [m] atmospheric pressue , equivelnt to 14.7 psi
+P_static = 0.6096 # static head, +, the tank is 3/4 filled up
+P_vapor = 0.24 #[m] vapor presure,  tempreture of water (room TEMPRETURE, check assumption?)
+NPSHAa = P_atm + P_static  - P_vapor - total_hf # must be significanly larger than graph value
+
+
+print(f"Total Friction Head Loss (hf): {total_hf:.3f} meters")
+
+print(f"NPSHA allowable: {NPSHAa:.2f} ")
