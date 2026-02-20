@@ -1,4 +1,7 @@
 import math
+import csv
+import os
+from datetime import datetime
 from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -143,17 +146,16 @@ if __name__ == "__main__":
         Q_m3_s=0.006,
         z1_m = 0.0,
         z2_m = 5.24 * FT_TO_M,
-        D_main_m = inch_diameter_to_m(2.0),
+        D_main_m = inch_diameter_to_m(3.0),
         L_main_m = 32.0 * FT_TO_M,
-        eps_m = 1.5e-6,          # PVC
+        eps_m = 4.5e-5,   # steel (commercial)
         pump_efficiency = 0.70,
         point2_is_reservoir_free_surface=False,  # "point 2 at outlet, has velocity" assumption
         minor_losses=[
             MinorLoss(name="Tee branch (exit weight tank)", K=1.0),
-            MinorLoss(name="Contraction 3in->2in", K=0.37),
-            MinorLoss(name="Contraction 2in->1in", K=0.4),
             MinorLoss(name=f"{n_elbows}x 90-deg elbows", K=1.1 * n_elbows),
-            MinorLoss(name="Sudden expansion 1in->2in", K=0.2, diameter_m=inch_diameter_to_m(1.0)),
+            MinorLoss(name="Standard PVC Contraction 3in->1in((≈ 45° total angle)) ", K=0.4),
+            MinorLoss(name="Sudden expansion (≈ 45° total angle) 1in->3in", K=0.79, diameter_m=inch_diameter_to_m(1.0)),
         ],
     )
 
@@ -169,3 +171,28 @@ if __name__ == "__main__":
     print(f"Hydraulic power:             {results['hydraulic_power_W']:.1f} W")
     print(f"Shaft power (@eta):          {results['shaft_power_W']:.1f} W")
     print(f"Shaft power (@eta):          {results['shaft_power_hp']:.3f} hp")
+
+    # Save results to CSV
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    csv_path = os.path.join(os.path.dirname(__file__), f"pump_hp_results_{timestamp}.csv")
+    rows = [
+        ("Parameter", "Value", "Unit"),
+        ("Flow rate (Q)",            params.Q_m3_s,                      "m³/s"),
+        ("Main pipe diameter",       params.D_main_m,                    "m"),
+        ("Pipe length",              params.L_main_m,                    "m"),
+        ("Pipe roughness (eps)",     params.eps_m,                       "m"),
+        ("Elevation difference",     results["delta_z_m"],               "m"),
+        ("Main-line velocity",       results["V_main_m_s"],              "m/s"),
+        ("Major losses",             results["h_major_m"],               "m"),
+        ("Minor losses",             results["h_minor_m"],               "m"),
+        ("Total losses",             results["h_total_losses_m"],        "m"),
+        ("Required pump head",       results["pump_head_m"],             "m"),
+        ("Hydraulic power",          results["hydraulic_power_W"],       "W"),
+        ("Shaft power",              results["shaft_power_W"],           "W"),
+        ("Shaft power",              results["shaft_power_hp"],          "hp"),
+        ("Pump efficiency",          params.pump_efficiency,             "-"),
+    ]
+    with open(csv_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerows(rows)
+    print(f"\nResults saved to: {csv_path}")
