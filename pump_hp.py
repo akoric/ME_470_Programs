@@ -148,13 +148,13 @@ if __name__ == "__main__":
         z2_m = 5.24 * FT_TO_M,
         D_main_m = inch_diameter_to_m(3.0),
         L_main_m = 32.0 * FT_TO_M,
-        eps_m = 4.5e-5,   # steel (commercial)
+        eps_m = 1.5e-6,   # PVC
         pump_efficiency = 0.70,
         point2_is_reservoir_free_surface=False,  # "point 2 at outlet, has velocity" assumption
         minor_losses=[
             MinorLoss(name="Tee branch (exit weight tank)", K=1.0),
             MinorLoss(name=f"{n_elbows}x 90-deg elbows", K=1.1 * n_elbows),
-            MinorLoss(name="Standard PVC Contraction 3in->1in((≈ 45° total angle)) ", K=0.4),
+            MinorLoss(name="Standard PVC Contraction 3in->1in((≈ 45° total angle)) ", K=0.4, diameter_m=inch_diameter_to_m(1.0)),
             MinorLoss(name="Sudden expansion (≈ 45° total angle) 1in->3in", K=0.79, diameter_m=inch_diameter_to_m(1.0)),
         ],
     )
@@ -162,7 +162,7 @@ if __name__ == "__main__":
     results = compute_pump_head_and_hp(params)
 
     print("---- Results ----")
-    print(f"Main-line velocity V (2 in): {results['V_main_m_s']:.3f} m/s")
+    print(f"Main-line velocity V (3 in): {results['V_main_m_s']:.3f} m/s")
     print(f"Elevation head (z2-z1):     {results['delta_z_m']:.3f} m")
     print(f"Major losses:                {results['h_major_m']:.3f} m")
     print(f"Minor losses:                {results['h_minor_m']:.3f} m")
@@ -173,6 +173,7 @@ if __name__ == "__main__":
     print(f"Shaft power (@eta):          {results['shaft_power_hp']:.3f} hp")
 
     # Save results to CSV
+
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     csv_path = os.path.join(os.path.dirname(__file__), f"pump_hp_results_{timestamp}.csv")
     rows = [

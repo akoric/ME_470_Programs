@@ -6,10 +6,10 @@ Pipe roughness (eps),1.5e-06,m
 Elevation difference,1.5971520000000001,m
 Main-line velocity,1.3156834942599902,m/s
 Major losses,0.20227442467911969,m
-Minor losses,6.353665618653572,m
-Total losses,6.555940043332692,m
-Required pump head,8.241349657149243,m
-Hydraulic power,483.9503493123123,W
-Shaft power,691.3576418747319,W
-Shaft power,0.9271258690449821,hp
+Minor losses,9.177909260783233,m
+Total losses,9.380183685462352,m
+Required pump head,11.065593299278904,m
+Hydraulic power,649.7962063639002,W
+Shaft power,928.2802948055718,W
+Shaft power,1.2448443799727134,hp
 Pump efficiency,0.7,-

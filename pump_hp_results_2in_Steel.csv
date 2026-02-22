@@ -1,0 +1,15 @@
+Parameter,Value,Unit
+Flow rate (Q),0.006,m³/s
+Main pipe diameter,0.0508,m
+Pipe length,9.7536,m
+Pipe roughness (eps),4.5e-05,m
+Elevation difference,1.5971520000000001,m
+Main-line velocity,2.9602878620849777,m/s
+Major losses,1.7877153876379825,m
+Minor losses,7.850349265956386,m
+Total losses,9.63806465359437,m
+Required pump head,11.682020823540665,m
+Hydraulic power,685.9941991809402,W
+Shaft power,979.991713115629,W
+Shaft power,1.3141905341719422,hp
+Pump efficiency,0.7,-
