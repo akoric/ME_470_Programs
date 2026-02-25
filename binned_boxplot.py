@@ -4,6 +4,15 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 
+# Use Arial font and slightly larger default font size for report-quality figures
+plt.rcParams["font.family"] = "Arial"
+plt.rcParams["font.size"] = 12
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+import numpy as np
+
 csv_path = "TAM_335_Lab_8_data.csv"
 
 df = pd.read_csv(csv_path)
@@ -26,10 +35,12 @@ ax.yaxis.set_major_locator(ticker.MaxNLocator(15))
 plt.grid(True, axis='y', linestyle='--', alpha=0.7)
 
 # Customize labels and title
-plt.title("Similarity Study of Overflow Spillways, Lab 8")
-plt.xlabel("ΔH (head above the crest) bin")
-plt.ylabel("Q (m³/s)")
+plt.title("Similarity Study of Overflow Spillways, Lab 8", fontsize=14)
+plt.xlabel("ΔH (head above the crest) bin (m)", fontsize=13)
+plt.ylabel("Q (m³/s)", fontsize=13)
 
+# Slightly increase tick label font sizes
+ax.tick_params(axis="both", labelsize=11)
 plt.tight_layout()
 plt.savefig("Lab_8_binned_boxplot.png")
 plt.show()
